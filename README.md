@@ -4,7 +4,7 @@ Dockerized ZNC server
 First you'll want to generate your configuration. This image will mount a volume, `/var/lib/znc`, where it will place all of your ZNC configuration files. If you're interested in the why, [here](https://docs.docker.com/userguide/dockervolumes/) is a quick read for you.
 
 ```
-$ docker run -it --name znc-conf tmaddox/znc --makeconf
+$ docker run -it --name znc-conf tmaddox/znc:1.0 --makeconf
 ```
 
 This will pull down the image if it doesn't exist locally and invoke the interactive configuration creator from ZNC.
@@ -70,7 +70,7 @@ As you can see, the initial configuration is pretty straightforward. I would rec
 As promised, now you'll want to start up a server using the configuration you just generated.
 
 ```
-$ docker run -d --name znc-server --volumes-from=znc-conf -p 6697:6697 tmaddox/znc
+$ docker run -d --name znc-server --volumes-from=znc-conf -p 6697:6697 tmaddox/znc:1.0
 ```
 
 Now you can go fill out your host, port, username, and password details in your favorite IRC client and connect directly to your ZNC server. Upon doing so, go ahead and issue a `/znc help` to your ZNC bouncer, through your IRC client, to get a list of possible commands you can issue.
