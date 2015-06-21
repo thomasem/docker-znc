@@ -85,6 +85,6 @@ root@1e57434b8081:/var/lib/znc# vim.tiny configs/znc.conf
 root@1e57434b8081:/var/lib/znc# exit
 ```
 
-Then, you may do `/znc rehash` in your IRC client when on a network through your ZNC bouncer in order to reload your configuration file. :)
+Then, you may do `/znc rehash` from your IRC client in order to reload your configuration file. :)
 
 Et voilà!
