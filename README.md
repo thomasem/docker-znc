@@ -80,9 +80,9 @@ ZNC documentation can be found here: http://wiki.znc.in/ZNC.
 When you want to edit your configuration after-the-fact you can do the following:
 
 ```
-$ docker run -it --entrypoint /bin/bash --volumes-from=znc-conf tmaddox/znc
-znc@b33b2673ba76:~$ vim.tiny /var/lib/znc/configs/znc.conf # Edit all the things!
-znc@b33b2673ba76:~$ exit
+$ docker exec -it znc-server /bin/bash
+root@1e57434b8081:/var/lib/znc# vim.tiny configs/znc.conf
+root@1e57434b8081:/var/lib/znc# exit
 ```
 
 Then, you may do `/znc rehash` in your IRC client when on a network through your ZNC bouncer in order to reload your configuration file. :)
