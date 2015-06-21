@@ -1,11 +1,14 @@
 # docker-znc
 Dockerized ZNC server
 
-First you'll want to generate your configuration. This image will mount a volume, `/var/lib/znc`, where it will place all of your ZNC configuration files. If you're interested in the why, here's a quick read for you: https://docs.docker.com/userguide/dockervolumes/.
+First you'll want to generate your configuration. This image will mount a volume, `/var/lib/znc`, where it will place all of your ZNC configuration files. If you're interested in the why, [here](https://docs.docker.com/userguide/dockervolumes/) is a quick read for you.
+
 ```
 $ docker run -it --name znc-conf tmaddox/znc --makeconf
 ```
+
 This will pull down the image if it doesn't exist locally and invoke the interactive configuration creator from ZNC.
+
 ```
 [ .. ] Checking for list of available modules...
 [ >> ] ok
