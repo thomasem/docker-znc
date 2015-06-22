@@ -116,7 +116,7 @@ After creating the `znc-conf` container, in order to reduce downtime in the migr
 $ docker pull tmaddoz/znc:1.0
 ```
 
-Once, Docker is done pulling the image, just stop your existing service and run the container, it should be very quick. We cannot start the container beforehand, if you expect to use the same port.
+Once, Docker is done pulling the image, just stop your existing service and run the container; it should be very quick. This will allow us to use the same port as before, without Docker erroring out trying to use a port that's already in-use.
 
 ```
 $ service znc stop && docker run -d --name znc-server --volumes-from=znc-conf -p 6697:6697 tmaddox/znc:1.0
