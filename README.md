@@ -1,5 +1,12 @@
 # Dockerized ZNC server
 
+## Requirements
+
+* Install [Docker](https://docs.docker.com/)
+* If on Mac OS X, or any other platform which tends to only have a Docker client, you'll also need a Docker daemon running remotely, [exposing the API](https://docs.docker.com/reference/api/docker_remote_api_v1.19/).
+* This can also easily be run on a [Docker Swarm](https://docs.docker.com/swarm/) cluster.
+
+## From scratch setup
 First you'll want to generate your configuration. This image will mount a volume, `/var/lib/znc`, where it will place all of your ZNC configuration files. If you're interested in the why, [here](https://docs.docker.com/userguide/dockervolumes/) is a quick read for you.
 
 ```
@@ -76,6 +83,8 @@ Now you can go fill out your host, port, username, and password details in your 
 
 ZNC documentation can be found here: http://wiki.znc.in/ZNC.
 
+## Editing the configuration
+
 When you want to edit your configuration after-the-fact you can do the following:
 
 ```
@@ -85,5 +94,32 @@ root@1e57434b8081:/var/lib/znc# exit
 ```
 
 Then, you may do `/znc rehash` from your IRC client in order to reload your configuration file. :)
+
+## Migrating existing ZNC bouncer
+
+The main thing to make an easy migration is to essentially mount your existing znc data directory inside your znc-conf container, instead of generating a new configuration. To do this, you can simply create a new container and mount your existing directory at the expected datadir for this Docker image (/var/lib/znc)
+```
+$ docker run --name znc-conf -v /path/to/znc:/var/lib/znc busybox
+```
+
+In this case, you don't necessarily need the `tmaddox/znc` image, since you're not invoking `znc --make-conf` to generate a new configuration. :)
+
+After you've created your `znc-conf` container, you can create your server container, like described in the [from scratch setup](#from-scratch-setup):
+
+```
+$ docker run -d --name znc-server --volumes-from=znc-conf -p 6697:6697 tmaddox/znc:1.0
+```
+
+After creating the `znc-conf` container, in order to reduce downtime in the migration, it might be best to `docker pull` the image first, so you could do something like:
+
+```
+$ docker pull tmaddoz/znc:1.0
+```
+
+Once, Docker is done pulling the image, just stop your existing service and run the container, it should be very quick. We cannot start the container beforehand, if you expect to use the same port.
+
+```
+$ service znc stop && docker run -d --name znc-server --volumes-from=znc-conf -p 6697:6697 tmaddox/znc:1.0
+```
 
 Et voilà!
