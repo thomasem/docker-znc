@@ -119,7 +119,7 @@ $ docker pull tmaddox/znc:1.0
 Once, Docker is done pulling the image, just stop your existing service and run the container; it should be very quick. This will allow us to use the same port as before, without Docker erroring out trying to use a port that's already in-use.
 
 ```
-$ service znc stop && docker run -d --name znc-server --volumes-from=znc-conf -p 6697:6697 tmaddox/znc:1.0
+$ service znc stop; docker run -d --name znc-server --volumes-from=znc-conf -p 6697:6697 tmaddox/znc:1.0
 ```
 ### Gotchas during migration
 
