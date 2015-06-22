@@ -121,5 +121,9 @@ Once, Docker is done pulling the image, just stop your existing service and run 
 ```
 $ service znc stop && docker run -d --name znc-server --volumes-from=znc-conf -p 6697:6697 tmaddox/znc:1.0
 ```
+### Gotchas during migration
+
+* Ensure the ports you map match which port ZNC is listening on. `-p 6697:6697` means I'm mapping port host 6697 (left port number) to container 6697 (right port number).
+* Ensure your data directory (the one mapped to `/var/lib/znc` is owned by the `znc` user (`chown -R znc:znc /path/to/znc`).
 
 Et voilà!
