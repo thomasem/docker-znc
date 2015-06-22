@@ -97,13 +97,13 @@ Then, you may do `/znc rehash` from your IRC client in order to reload your conf
 
 ## Migrating existing ZNC bouncer
 
-The main thing to make an easy migration is to essentially mount your existing ZNC data directory inside a `znc-conf` container, instead of generating a new configuration. To do this, you can simply create a new container and mount your existing directory at the expected datadir for this Docker image (`/var/lib/znc`).
+The main thing to make an easy migration is to essentially mount your existing ZNC data directory inside a `znc-conf` container, instead of generating a new configuration. To do this, you can simply create a new container and mount your existing directory at the expected data directory for this Docker image (`/var/lib/znc`).
 
 ```
 $ docker run --name znc-conf -v /path/to/znc:/var/lib/znc busybox
 ```
 
-In this case, you don't necessarily need the `tmaddox/znc` image for your `znc-conf` container, since you're not invoking `znc --make-conf` to generate a new configuration. :)
+In this case, you don't necessarily need the `tmaddox/znc` image for your `znc-conf` container, since you're not invoking `znc --make-conf` to generate a new configuration. So, for this example, I just used the `busybox` image. :)
 
 After you've created your `znc-conf` container, you can create your server container, like described in the [from scratch setup](#from-scratch-setup):
 
@@ -117,7 +117,7 @@ After creating the `znc-conf` container, in order to reduce downtime in the migr
 $ docker pull tmaddox/znc:1.0
 ```
 
-Once, Docker is done pulling the image, just stop your existing service and run the container; it should be very quick. This will allow us to use the same port as before, without Docker erroring out trying to use a port that's already in-use.
+Once, Docker is done pulling the image, just stop your existing service and then run the `znc-server` container. This will allow us to use the same port as before, without Docker erroring out trying to use a port that's already in-use.
 
 ```
 $ service znc stop; docker run -d --name znc-server --volumes-from=znc-conf -p 6697:6697 tmaddox/znc:1.0
