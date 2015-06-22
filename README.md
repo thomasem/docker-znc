@@ -105,9 +105,7 @@ $ docker run --name znc-conf -v /path/to/znc:/var/lib/znc busybox
 
 In this case, you don't necessarily need the `tmaddox/znc` image for your `znc-conf` container, since you're not invoking `znc --make-conf` to generate a new configuration. So, for this example, I just used the `busybox` image. :)
 
-After you've created your `znc-conf` container, you can create your server container, like described in the [from scratch setup](#from-scratch-setup):
-
-In order to reduce downtime in the migration, it might be best to pull the image first, like so:
+After you've created your `znc-conf` container, it's time to create your server container. In order to reduce downtime in the migration, it might be best to pull the image first, like so:
 
 ```
 $ docker pull tmaddox/znc:1.0
@@ -118,6 +116,7 @@ Once, Docker is done pulling the image, just stop your existing ZNC process and 
 ```
 $ service znc stop; docker run -d --name znc-server --volumes-from=znc-conf -p 6697:6697 tmaddox/znc:1.0
 ```
+
 ### Gotchas during migration
 
 * Ensure the ports you map match which port ZNC is listening on. `-p 6697:6697` means I'm mapping port host 6697 (left port number) to container 6697 (right port number).
