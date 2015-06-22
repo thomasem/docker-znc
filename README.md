@@ -125,5 +125,6 @@ $ service znc stop; docker run -d --name znc-server --volumes-from=znc-conf -p 6
 
 * Ensure the ports you map match which port ZNC is listening on. `-p 6697:6697` means I'm mapping port host 6697 (left port number) to container 6697 (right port number).
 * Ensure your data directory (the one mapped to `/var/lib/znc` is owned by the `znc` user (`chown -R znc:znc /path/to/znc`).
+* If you have a specific `BindHost` defined in your `znc.conf`, the Docker container won't be able to bind to your original host IP address. This line can be removed so it can automatically bind to your Docker container's internal IP address.
 
 Et voilà!
