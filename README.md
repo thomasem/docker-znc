@@ -97,12 +97,13 @@ Then, you may do `/znc rehash` from your IRC client in order to reload your conf
 
 ## Migrating existing ZNC bouncer
 
-The main thing to make an easy migration is to essentially mount your existing znc data directory inside your znc-conf container, instead of generating a new configuration. To do this, you can simply create a new container and mount your existing directory at the expected datadir for this Docker image (/var/lib/znc)
+The main thing to make an easy migration is to essentially mount your existing ZNC data directory inside a `znc-conf` container, instead of generating a new configuration. To do this, you can simply create a new container and mount your existing directory at the expected datadir for this Docker image (`/var/lib/znc`).
+
 ```
 $ docker run --name znc-conf -v /path/to/znc:/var/lib/znc busybox
 ```
 
-In this case, you don't necessarily need the `tmaddox/znc` image, since you're not invoking `znc --make-conf` to generate a new configuration. :)
+In this case, you don't necessarily need the `tmaddox/znc` image for your `znc-conf` container, since you're not invoking `znc --make-conf` to generate a new configuration. :)
 
 After you've created your `znc-conf` container, you can create your server container, like described in the [from scratch setup](#from-scratch-setup):
 
