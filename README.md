@@ -9,8 +9,16 @@
 ## From scratch setup
 First you'll want to generate your configuration. This image will mount a volume, `/var/lib/znc`, where it will place all of your ZNC configuration files. If you're interested in the why, [here](https://docs.docker.com/userguide/dockervolumes/) is a quick read for you.
 
+To do this, create a volume for holding the ZNC data.
+
 ```
-$ docker run -it --name znc-conf tmaddox/znc:1.0 --makeconf
+$ docker volume create --name znc-data
+```
+
+Now generate your initial configuration.
+
+```
+$ docker run -it --rm -v znc-data:/var/lib/znc tmaddox/znc:1.1 --makeconf
 ```
 
 This will pull down the image if it doesn't exist locally and invoke the interactive configuration creator from ZNC.
@@ -76,7 +84,7 @@ As you can see, the initial configuration is pretty straightforward. I would rec
 As promised, now you'll want to start up a server using the configuration you just generated.
 
 ```
-$ docker run -d --name znc-server --volumes-from=znc-conf -p 6697:6697 tmaddox/znc:1.0
+$ docker run -d --name znc-server -v znc-data:/var/lib/znc -p 6697:6697 tmaddox/znc:1.1
 ```
 
 Now you can go fill out your host, port, username, and password details in your favorite IRC client and connect directly to your ZNC server. Upon doing so, go ahead and issue a `/znc help` to your ZNC bouncer, through your IRC client, to get a list of possible commands you can issue.
@@ -94,33 +102,5 @@ root@1e57434b8081:/var/lib/znc# exit
 ```
 
 Then, you may do `/znc rehash` from your IRC client in order to reload your configuration file. :)
-
-## Migrating existing ZNC bouncer
-
-The main thing to make an easy migration is to essentially mount your existing ZNC data directory inside a `znc-conf` container, instead of generating a new configuration. To do this, you can simply create a new container and mount your existing directory at the expected data directory for this Docker image (`/var/lib/znc`).
-
-```
-$ docker run --name znc-conf -v /path/to/znc:/var/lib/znc busybox
-```
-
-In this case, you don't necessarily need the `tmaddox/znc` image for your `znc-conf` container, since you're not invoking `znc --make-conf` to generate a new configuration. So, for this example, I just used the `busybox` image. :)
-
-After you've created your `znc-conf` container, it's time to create your server container. In order to reduce downtime in the migration, it might be best to pull the image first, like so:
-
-```
-$ docker pull tmaddox/znc:1.0
-```
-
-Once, Docker is done pulling the image, just stop your existing ZNC process and then run the `znc-server` container. This will allow us to use the same port as before, without Docker erroring out trying to use a port that's already in-use.
-
-```
-$ service znc stop; docker run -d --name znc-server --volumes-from=znc-conf -p 6697:6697 tmaddox/znc:1.0
-```
-
-### Gotchas during migration
-
-* Ensure the ports you map match which port ZNC is listening on. `-p 6697:6697` means I'm mapping port host 6697 (left port number) to container 6697 (right port number).
-* Ensure your data directory (the one mapped to `/var/lib/znc`) is owned by the `znc` user (`chown -R znc:znc /path/to/znc`).
-* If you have a specific `BindHost` defined in your `znc.conf`, the Docker container won't be able to bind to your original host IP address. This line can be removed so it can automatically bind to your Docker container's internal IP address.
 
 Et voilà!
