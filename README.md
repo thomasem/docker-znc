@@ -3,8 +3,6 @@
 ## Requirements
 
 * Install [Docker](https://docs.docker.com/).
-* If on Mac OS X, or any other platform which tends to only have a Docker client, you'll also need a Docker daemon running remotely, [exposing the API](https://docs.docker.com/reference/api/docker_remote_api_v1.19/).
-* This can also easily be run on a [Docker Swarm](https://docs.docker.com/swarm/) cluster.
 
 ## From scratch setup
 First you'll want to generate your configuration. This image will mount a volume, `/var/lib/znc`, where it will place all of your ZNC configuration files. If you're interested in the why, [here](https://docs.docker.com/userguide/dockervolumes/) is a quick read for you.
